@@ -1,0 +1,25 @@
+{
+  "name": "tp3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tamita00/TP-3---Node-Express.git"
+  },
+  "author": "tamara dratler y santiago butler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tamita00/TP-3---Node-Express/issues"
+  },
+  "homepage": "https://github.com/Tamita00/TP-3---Node-Express#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
