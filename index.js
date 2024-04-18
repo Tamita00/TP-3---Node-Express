@@ -1,6 +1,7 @@
 import express from "express"; // hacer npm i express
 import cors from "cors"; // hacer npm i cors
 import { PI, sumar, multiplicar, restar, dividir, createArray } from './src/modules/matrmatica.js';
+import Alumno from "./src/models/alumno.js";
 import {OMDBSearchByPage, OMDBSearchComplete, OMDBGetByImdbID} from "./src/modules/omdb-wrapper.js";
 
 const app = express();
@@ -130,22 +131,86 @@ app.get('/omdb/searchComplete',  async (req, res) =>
 
 })
 
-//10 PREGUNTAR
 
-app.get('/omdb/getbyomdbid',  async (req, res) =>
-{
-    const searchText = req.query.id;
+//10
+app.get('/omdb/getbyomdbid', async (req, res) => {
+    const id = req.query.id;
     try {
         const resultado = await OMDBGetByImdbID(id);
-        if (resultado.respuesta)
-        {
-            res.status
+        if (resultado.respuesta) {
+            res.status(200).send(resultado);
         }
-    }catch (error) {
+        else {
+            res.status(404).send({ mensaje: 'No se encontraron resultados' });
+        }
+    } catch (error) {
         res.status(500).send({ error: error.message });
     }
+});
 
-})
+//11
+var alumnosArray = [];
+alumnosArray.push(new Alumno("Esteban Dido" , "22888444", 20));
+alumnosArray.push(new Alumno("Matias Queroso", "28946255", 51));
+alumnosArray.push(new Alumno("Elba Calao" , "32623391", 18));
+
+app.get('/alumnos', async (req, res) => {
+    try {
+        res.status(200).send(alumnosArray);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+//12
+
+app.get('/alumnos/:dni', async (req, res) => {
+    try {
+        const result = alumnosArray.find(({ dni }) => dni === req.params.dni);
+
+        res.status(200).send(result);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+//13
+
+app.post('/alumnos', async (req, res) => {
+    try {
+        
+    alumnosArray.push(new Alumno(req.params.nombre , req.params.dni, req.params.edad));
+
+        res.status(201).send("Created");
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+
+//14
+
+app.delete('/alumnos/:dni', async (req, res) => {
+    try {
+        const dni = req.params.dni;
+        
+        const posicion = alumnosArray.findIndex(alumno => alumno.getDni() === dni);
+
+        if (posicion === -1) {
+            res.status(404).send({ error: 'Alumno no encontrado' });
+            return;
+        }
+
+        alumnosArray.splice(posicion, 1);
+
+        res.status(202).send("Deleted");
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+
+
 
 // Inicio el Server y lo pongo a escuchar.
 
