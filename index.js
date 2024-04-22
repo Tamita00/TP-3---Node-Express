@@ -3,6 +3,7 @@ import cors from "cors"; // hacer npm i cors
 import { PI, sumar, multiplicar, restar, dividir, createArray } from './src/modules/matrmatica.js';
 import Alumno from "./src/models/alumno.js";
 import {OMDBSearchByPage, OMDBSearchComplete, OMDBGetByImdbID} from "./src/modules/omdb-wrapper.js";
+import ValidacionesHelper from './src/modules/ValidacionesHelper.js'; //hacer npm i nodemon
 
 const app = express();
 const port = 3000;
@@ -12,6 +13,7 @@ const port = 3000;
 app.use(cors()); // Middleware de CORS
 app.use(express.json()); // Middleware para parsear y comprender JSON
 
+/*-------------------------------------- PARTE 1 --------------------------------------*/
 
 // Aca pongo todos los EndPoints
 
@@ -49,10 +51,14 @@ app.get('/validarfecha/:ano/:mes/:dia', (req, res) => {
 
 //04
 app.get('/matematica/sumar', (req, res) =>
-{
-    const n1 = parseFloat(req.query.n1);
-    const n2 = parseFloat(req.query.n2);
-    const resultado = sumar(n1,n2);
+{   let n1;
+    let n2;
+    n1 = ValidacionesHelper.getIntegerOrDefault(req.query.n1, 0);
+    n2 = ValidacionesHelper.getIntegerOrDefault(req.query.n2, 0);
+    console.log('n1', n1)
+    console.log('n2', n2)
+
+    const resultado = sumar(n1, n2);
     res.status(200).send('El resultado es: ' + resultado);
 })  
 
@@ -60,8 +66,8 @@ app.get('/matematica/sumar', (req, res) =>
 //05
 app.get('/matematica/restar', (req, res) =>
 {
-    const n1 = parseFloat(req.query.n1);
-    const n2 = parseFloat(req.query.n2);
+    const n1 = ValidacionesHelper.getIntegerOrDefault(req.query.n1, 0);
+    const n2 = ValidacionesHelper.getIntegerOrDefault(req.query.n2, 0);
     const resultado = restar(n1,n2);
     res.status(200).send('El resultado es: ' + resultado);
 })  
@@ -70,8 +76,8 @@ app.get('/matematica/restar', (req, res) =>
 //06
 app.get('/matematica/multiplicar', (req, res) =>
 {
-    const n1 = parseFloat(req.query.n1);
-    const n2 = parseFloat(req.query.n2);
+    const n1 = ValidacionesHelper.getIntegerOrDefault(req.query.n1, 0);
+    const n2 = ValidacionesHelper.getIntegerOrDefault(req.query.n2, 0);
     const resultado = multiplicar(n1,n2);
     res.status(200).send('El resultado es:' + resultado);
 })
@@ -79,8 +85,8 @@ app.get('/matematica/multiplicar', (req, res) =>
 
 app.get('/matematica/dividir', (req, res) =>
 {
-    const n1 = parseFloat(req.query.n1);
-    const n2 = parseFloat(req.query.n2);
+    const n1 = ValidacionesHelper.getIntegerOrDefault(req.query.n1, 0);
+    const n2 = ValidacionesHelper.getIntegerOrDefault(req.query.n2, 0);
 
     if(n2==0)
     {
@@ -114,7 +120,7 @@ app.get('/omdb/searchbypage', async (req, res) => {
 });
 
 
-//09 PREGUNTAR
+//09 
  
 app.get('/omdb/searchComplete',  async (req, res) =>
 {
@@ -217,3 +223,5 @@ app.delete('/alumnos/:dni', async (req, res) => {
 app.listen(port, () => {
 console.log(`Example app listening on port ${port}`)
 })
+
+

@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Tamita00/TP-3---Node-Express#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
   }
 }
